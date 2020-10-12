@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "telaDeLogin",
+    "slug": "telaDeLogin",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo@square.png",
+    "splash": {
+      "image": "./assets/logo@2x.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "favicon": "./assets/logo@3x.png"
+    }
+  }
+}
