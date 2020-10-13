@@ -90,6 +90,7 @@ export default function App() {
           style={styles.input}
           placeholder="Senha"
           autoCorrect={false}
+          secureTextEntry
           onChangeText={() => { }}
         />
 
