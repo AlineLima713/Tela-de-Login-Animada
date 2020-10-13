@@ -1,18 +1,84 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TextInput, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TextInput, TouchableOpacity, Animated, Keyboard } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
 export default function App() {
+
+  const [offset] = useState(new Animated.ValueXY({ x: 0, y: 95 }));
+  const [opacity] = useState(new Animated.Value(0));
+  const [logo] = useState(new Animated.Value(1))
+
+  useEffect(() => {
+    keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
+    keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
+
+    Animated.parallel([
+      Animated.spring(offset.y, {
+        toValue: 0,
+        speed: 4,
+        useNativeDriver: true,
+        bounciness: 20,
+      }),
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      })
+    ]).start();
+  }, []);
+
+  function keyboardDidShow() {
+    Animated.parallel([
+      Animated.timing(logo, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start()
+  }
+
+  function keyboardDidHide() {
+    Animated.parallel([
+      Animated.timing(logo, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start()
+  }
+  
+
   return (
     <KeyboardAvoidingView style={styles.background}>
       <View style={styles.containerLogo}>
-        <Image
+        <Animated.Image
+          style={{
+            transform: [
+              {
+                scale: logo.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0.8, 1],
+                  extrapolate: 'clamp',
+                }),
+              },
+            ],
+          }}
           source={require('./assets/logo.png')} />
         <StatusBar style="auto" />
       </View>
 
-      <Animated.View style={styles.container}>
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            opacity: opacity,
+            transform: [
+              { translateY: offset.y }
+            ]
+          }
+        ]}
+      >
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -55,7 +121,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginTop: '30%',
-    
+
   },
 
   container: {
